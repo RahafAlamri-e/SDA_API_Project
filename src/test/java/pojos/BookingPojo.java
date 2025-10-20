@@ -24,6 +24,15 @@ public class BookingPojo {
         this.additionalneeds = additionalneeds;
     }
 
+    public BookingPojo(String firstname, String lastname, Integer totalprice, Boolean depositpaid, String checkin, String checkout, String additionalneeds) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.totalprice = totalprice;
+        this.depositpaid = depositpaid;
+        this.bookingdates = new BookingDatesPojo(checkin, checkout);
+        this.additionalneeds = additionalneeds;
+    }
+
     public String getFirstname() {
         return firstname;
     }

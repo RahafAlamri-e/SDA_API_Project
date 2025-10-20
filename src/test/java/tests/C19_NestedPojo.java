@@ -5,8 +5,10 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 import pojos.BookingDatesPojo;
 import pojos.BookingPojo;
+import pojos.BookingResponsePojo;
 
 import static io.restassured.RestAssured.given;
+import static org.testng.Assert.assertEquals;
 
 public class C19_NestedPojo extends BookerBaseUrl {
 /*
@@ -51,15 +53,28 @@ public class C19_NestedPojo extends BookerBaseUrl {
     @Test
     void nestedPojoTest() {
 
-        //Prepare the expected data
+        // Prepare the expected data
         BookingDatesPojo bookingDatesPojo = new BookingDatesPojo("2018-01-01", "2019-01-01");
         BookingPojo expectedData = new BookingPojo("Josh", "Allen", 111, true, bookingDatesPojo, "Coffee");
         System.out.println("expectedData = " + expectedData);
 
-        //Send the request
+        // Send the request
         Response response = given(spec).body(expectedData).post("/booking");
         response.prettyPrint();
 
+        // Do assertion
+        // convert the response into pojo class object and assert it
+        BookingResponsePojo actualData = response.as(BookingResponsePojo.class);// de-serialization
+        System.out.println("actualData = " + actualData);
 
+        assertEquals(response.statusCode(), 200);
+        assertEquals(actualData.getBooking().getFirstname(), expectedData.getFirstname());
+        assertEquals(actualData.getBooking().getLastname(), expectedData.getLastname());
+        assertEquals(actualData.getBooking().getTotalprice(), expectedData.getTotalprice());
+        assertEquals(actualData.getBooking().getTotalprice(), expectedData.getTotalprice());
+        assertEquals(actualData.getBooking().getDepositpaid(), expectedData.getDepositpaid());
+        assertEquals(actualData.getBooking().getBookingdates().getCheckin(), expectedData.getBookingdates().getCheckin());
+        assertEquals(actualData.getBooking().getBookingdates().getCheckout(), expectedData.getBookingdates().getCheckout());
+        assertEquals(actualData.getBooking().getAdditionalneeds(), expectedData.getAdditionalneeds());
     }
 }
