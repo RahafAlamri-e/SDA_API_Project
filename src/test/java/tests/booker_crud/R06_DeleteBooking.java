@@ -1,0 +1,35 @@
+package tests.booker_crud;
+
+import base_urls.BookerBaseUrl;
+import io.restassured.response.Response;
+import org.hamcrest.Matchers;
+import org.testng.annotations.Test;
+
+import static io.restassured.RestAssured.given;
+import static tests.booker_crud.R02_CreateBooking.bookingId;
+
+public class R06_DeleteBooking extends BookerBaseUrl {
+
+    /*
+        Given
+            https://restful-booker.herokuapp.com/booking/1
+        Then
+            Status code should be 201
+        And
+            Response body should be "Created"
+     */
+
+    @Test
+    void deleteBookingTest(){
+
+        //Send the request
+        Response response = given(spec).delete("/booking/" + bookingId);
+        response.prettyPrint();
+
+        //Do assertion
+        response
+                .then()
+                .statusCode(201)
+                .body(Matchers.containsString("Created"));
+    }
+}
